@@ -1,18 +1,20 @@
 package net.hydrogen2oxygen.se;
 
+import net.hydrogen2oxygen.se.exceptions.HyperWebDriverException;
 import net.hydrogen2oxygen.se.exceptions.PreconditionsException;
 import net.hydrogen2oxygen.se.selenium.HyperWebDriver;
 
-public class Se extends HyperWebDriver {
+public class Se {
 
     private static  Se se;
+    private HyperWebDriver webDriver;
 
-    private Se() {
+    private Se() throws HyperWebDriverException {
         // TODO implement a nice autoConfigurator ... inside the getInstance() method!
-        super();
+        webDriver = new HyperWebDriver(HyperWebDriver.DriverTypes.LOCAL_CHROME.name(),null, null);
     }
 
-    public Se getInstance() {
+    public Se getInstance() throws HyperWebDriverException {
 
         if (se == null) {
             // TODO get the Config for Selenium, Drivers, Global Environments etc here (use a convention)

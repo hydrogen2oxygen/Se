@@ -105,12 +105,12 @@ public class HyperWebDriver {
         return this;
     }
 
-    public HyperWebDriver insertText(String id, String text) {
+    public HyperWebDriver text(String id, String text) {
         driver.findElement(By.id(id)).sendKeys(text);
         return this;
     }
 
-    public HyperWebDriver insertTextByName(String id, String text) {
+    public HyperWebDriver textByName(String id, String text) {
         driver.findElement(By.name(id)).sendKeys(text);
         return this;
     }

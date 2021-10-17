@@ -3,7 +3,7 @@ package net.hydrogen2oxygen.se;
 import net.hydrogen2oxygen.se.exceptions.PreconditionsException;
 
 /**
- * Every selenium test or automation implements this interface
+ * Every selenium test, automation or snippet implements this interface
  */
 public interface IAutomation {
 
