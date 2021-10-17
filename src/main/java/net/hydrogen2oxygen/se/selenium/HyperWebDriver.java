@@ -28,10 +28,6 @@ public class HyperWebDriver {
     private WebDriver driver;
     private DriverTypes driverType;
 
-    public HyperWebDriver() {
-
-    }
-
     public enum DriverTypes {
         LOCAL_CHROME, REMOTE_FIREFOX, REMOTE_CHROME
     }
@@ -49,9 +45,12 @@ public class HyperWebDriver {
 
         this.driverType = DriverTypes.valueOf(driverType);
 
+        if (System.getProperty("webdriver.chrome.driver") == null) {
+            System.setProperty("webdriver.chrome.driver", seleniumDriverDirectory + "/chromedriver.exe");
+        }
+
         if (DriverTypes.LOCAL_CHROME.name().equals(driverType)) {
 
-            System.setProperty("webdriver.chrome.driver", seleniumDriverDirectory + "/chromedriver.exe");
             ChromeOptions chromeOptions = new ChromeOptions();
             chromeOptions.setHeadless(false);
             driver = new ChromeDriver(chromeOptions);
@@ -105,13 +104,18 @@ public class HyperWebDriver {
         return this;
     }
 
+    public HyperWebDriver sendReturnForElementByName(String name) {
+        driver.findElement(By.name(name)).sendKeys(Keys.RETURN);
+        return this;
+    }
+
     public HyperWebDriver text(String id, String text) {
         driver.findElement(By.id(id)).sendKeys(text);
         return this;
     }
 
-    public HyperWebDriver textByName(String id, String text) {
-        driver.findElement(By.name(id)).sendKeys(text);
+    public HyperWebDriver textByName(String name, String text) {
+        driver.findElement(By.name(name)).sendKeys(text);
         return this;
     }
 
@@ -150,7 +154,14 @@ public class HyperWebDriver {
             }
 
             if (elementText.contains(text)) {
-                element.click();
+                try {
+                    element.click();
+                } catch (ElementNotInteractableException e) {
+                    // sometimes the clickable element is a button, but the text is inside a div inside the button
+                    WebElement parent = (WebElement) ((JavascriptExecutor) driver).executeScript(
+                            "return arguments[0].parentNode;", element);
+                    parent.click();
+                }
                 clickPerformed = true;
                 break;
             }
