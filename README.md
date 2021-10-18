@@ -2,7 +2,7 @@
 **Se**(lenium) is a cousin of [HyperSelenium](https://github.com/hydrogen2oxygen/hyperselenium). Both aims to enable a developer to write fast browser automations
 for tests or other purposes. In contrast to Hyperselenium **Se** uses only Java without a script language.
 
-##Planned features
+## Planned features
 - Simple automation creation
 - Reusable Snippets
 - Groups
