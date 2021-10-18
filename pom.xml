@@ -8,7 +8,28 @@
     <artifactId>se</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>Se(lenium)</name>
+    <description>Selenium wrapper which enables groups and parallel execution</description>
     <url>https://github.com/hydrogen2oxygen/Se</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Pietro Lusso</name>
+            <email>luxuspeter@googlemail.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/hydrogen2oxygen/Se.git</connection>
+        <developerConnection>scm:git:ssh://github.com/hydrogen2oxygen/Se.git</developerConnection>
+        <url>https://github.com/hydrogen2oxygen/Se/tree/main</url>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
