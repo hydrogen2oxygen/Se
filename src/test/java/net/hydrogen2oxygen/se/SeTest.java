@@ -10,15 +10,20 @@ import java.io.IOException;
 public class SeTest {
 
     @Test
-    public void testGithubSearch() throws HyperWebDriverException, IOException {
+    public void testGithubSearch() {
 
-        Se se = Se.getInstance();
-        HyperWebDriver wd = se.getWebDriver();
+        try {
+            Se se = Se.getInstance();
+            HyperWebDriver wd = se.getWebDriver();
 
-        // let's use a snippet
-        se.run(new OpenGithubProject(se));
+            // let's use a snippet
+            se.run(new OpenGithubProject(se));
 
-        wd.close();
+            wd.close();
+        } catch (HyperWebDriverException e) {
+            System.err.println("Check your driver configuration please!");
+        }
+
 
     }
 }

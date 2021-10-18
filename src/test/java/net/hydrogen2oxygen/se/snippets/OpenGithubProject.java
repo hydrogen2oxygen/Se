@@ -1,6 +1,5 @@
 package net.hydrogen2oxygen.se.snippets;
 
-import net.hydrogen2oxygen.se.Environment;
 import net.hydrogen2oxygen.se.IAutomation;
 import net.hydrogen2oxygen.se.Se;
 import net.hydrogen2oxygen.se.exceptions.PreconditionsException;

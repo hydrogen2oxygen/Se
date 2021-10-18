@@ -18,7 +18,11 @@ public class Se {
     private Se() throws HyperWebDriverException {
         objectMapper = new ObjectMapper();
         // TODO implement a nice autoConfigurator ... inside the getInstance() method!
-        webDriver = new HyperWebDriver(HyperWebDriver.DriverTypes.LOCAL_CHROME.name(),null, null);
+        try {
+            webDriver = new HyperWebDriver(HyperWebDriver.DriverTypes.LOCAL_CHROME.name(), null, null);
+        } catch (IllegalStateException e) {
+            throw new HyperWebDriverException("Check your driver configuration please!", e);
+        }
     }
 
     public static Se getInstance() throws HyperWebDriverException {
