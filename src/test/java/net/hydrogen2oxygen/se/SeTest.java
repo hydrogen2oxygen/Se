@@ -1,6 +1,5 @@
 package net.hydrogen2oxygen.se;
 
-import net.hydrogen2oxygen.se.exceptions.EnvironmentException;
 import net.hydrogen2oxygen.se.exceptions.HyperWebDriverException;
 import net.hydrogen2oxygen.se.snippets.OpenGithubProject;
 import org.apache.logging.log4j.LogManager;

@@ -19,7 +19,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 public class HyperWebDriver {

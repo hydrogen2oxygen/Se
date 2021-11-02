@@ -1,11 +1,11 @@
 package net.hydrogen2oxygen.se;
 
 import net.hydrogen2oxygen.se.exceptions.PreconditionsException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
 public class Group implements IAutomation {
 
