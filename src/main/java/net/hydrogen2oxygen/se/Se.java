@@ -43,8 +43,7 @@ public class Se {
     public static Environment loadEnvironment(String environmentFileString) throws EnvironmentException, IOException {
 
         if (environmentFileString == null || environmentFileString.trim().length() == 0) {
-            logger.warn("No environment provided. You cannot switch an environment without proper configuration. But you can still work with the standard automation.");
-            return new Environment();
+            throw new EnvironmentException("No environment provided. You cannot switch an environment without proper configuration. But you can still work with the standard automation.");
         }
 
         logger.info("Loading environment " + environmentFileString);

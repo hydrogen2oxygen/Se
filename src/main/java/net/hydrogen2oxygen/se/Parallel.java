@@ -37,6 +37,7 @@ public class Parallel {
                         try {
                             group.checkPreconditions();
                             group.run();
+                            group.cleanUp();
                         } catch (Exception e) {
                             logger.error("Error during parallel run of group: " + group.getGroupName(), e);
                         }

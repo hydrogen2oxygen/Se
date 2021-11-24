@@ -23,6 +23,7 @@ public class SeTest {
             OpenGithubSearchSelenium openGithubSearchSelenium = new OpenGithubSearchSelenium();
             openGithubSearchSelenium.setSe(se);
             se.run(openGithubSearchSelenium);
+            se.getWebDriver().close();
 
         } catch (HyperWebDriverException e) {
             logger.error("Check your driver configuration please!", e);
