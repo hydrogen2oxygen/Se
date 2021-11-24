@@ -17,6 +17,7 @@ public class EnvironmentTest {
         exampleEnvironment.setName("simple");
         exampleEnvironment.getData().put("userName","John");
         exampleEnvironment.getData().put("baseUrl","https://blabla.thisandthat.com");
+        exampleEnvironment.getData().put("screenshots.path","target/screenshots/");
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
