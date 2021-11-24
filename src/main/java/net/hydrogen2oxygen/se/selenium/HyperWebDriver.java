@@ -17,8 +17,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 public class HyperWebDriver {
@@ -201,10 +201,12 @@ public class HyperWebDriver {
     }
 
     public void close() {
-        if (driver != null) {
-            driver.quit();
-        }
         closed = true;
+        driver.close();
+    }
+
+    public void quit() {
+        driver.quit();
     }
 
     public HyperWebDriver waitMillis(int millis) throws InterruptedException {
@@ -258,7 +260,7 @@ public class HyperWebDriver {
 
     public void waitForJQuery() {
 
-        waitForJavascript((JavascriptExecutor) driver,"return jQuery.active");
+        waitForJavascript((JavascriptExecutor) driver, "return jQuery.active");
     }
 
     public void waitForJavascript(final String script) {
@@ -271,18 +273,18 @@ public class HyperWebDriver {
                     String message, Throwable lastException) {
                 return new RuntimeException(message);
             }
-        }.withTimeout(10, TimeUnit.SECONDS)
+        }.withTimeout(Duration.ofSeconds(10))
                 .until(new Function<JavascriptExecutor, Boolean>() {
                     public Boolean apply(JavascriptExecutor e) {
 
                         Object result = executor.executeScript(script);
 
                         if (result instanceof Long) {
-                            return (Long)result == 0;
+                            return (Long) result == 0;
                         }
 
                         if (result instanceof Boolean) {
-                            return (Boolean)result;
+                            return (Boolean) result;
                         }
 
                         return result != null;
