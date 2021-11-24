@@ -45,6 +45,10 @@ public class HyperWebDriver {
 
         this.driverType = DriverTypes.valueOf(driverType);
 
+        if (seleniumDriverDirectory == null || seleniumDriverDirectory.trim().length() == 0) {
+            seleniumDriverDirectory = "..";
+        }
+
         if (System.getProperty("webdriver.chrome.driver") == null) {
             System.setProperty("webdriver.chrome.driver", seleniumDriverDirectory + "/chromedriver.exe");
         }

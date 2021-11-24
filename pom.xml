@@ -44,6 +44,7 @@
         <pdfbox.version>2.0.19</pdfbox.version>
         <io.github.classgraph.version>LATEST</io.github.classgraph.version>
         <org.eclipse.jgit.version>5.1.3.201810200350-r</org.eclipse.jgit.version>
+        <slf4j.version>1.8.0-beta4</slf4j.version>
     </properties>
 
     <dependencies>
@@ -89,6 +90,16 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
 
         <!-- TEST DEPENDENCIES -->

@@ -1,6 +1,7 @@
 package net.hydrogen2oxygen.se;
 
 import net.hydrogen2oxygen.se.exceptions.PreconditionsException;
+import net.hydrogen2oxygen.se.selenium.HyperWebDriver;
 
 /**
  * Every selenium test, automation or snippet implements this interface
@@ -24,4 +25,10 @@ public interface IAutomation {
      * @throws Exception thrown usually when unexpected errors occurs
      */
     void cleanUp() throws Exception;
+
+    /**
+     * Set Se(lenium) (useful for parallel automation inside a group)
+     * @param environment
+     */
+    void setSe(Se se);
 }
