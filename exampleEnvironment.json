@@ -1,1 +1,1 @@
-{"data":{"baseUrl":"https://blabla.thisandthat.com","userName":"John","screenshots.path":"target/screenshots/"},"name":"simple"}
+{"data":{"nThreads":"8","baseUrl":"https://blabla.thisandthat.com","ping.timeoout.milliseconds":"5000","userName":"John","screenshots.path":"target/screenshots/"},"name":"simple"}

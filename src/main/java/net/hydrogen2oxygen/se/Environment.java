@@ -23,4 +23,20 @@ public class Environment {
     public void setData(Map<String, String> data) {
         this.data = data;
     }
+
+    public String get(String key) {
+        return getData().get(key);
+    }
+
+    public Integer getInt(String key) {
+        return Integer.parseInt(get(key));
+    }
+
+    /**
+     * Add additional data from another environment object
+     * @param env
+     */
+    public void addEnvironment(Environment env) {
+        data.putAll(env.getData());
+    }
 }

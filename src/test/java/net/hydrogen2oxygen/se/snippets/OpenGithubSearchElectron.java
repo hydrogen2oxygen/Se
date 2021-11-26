@@ -1,10 +1,7 @@
 package net.hydrogen2oxygen.se.snippets;
 
 import net.hydrogen2oxygen.se.AbstractBaseAutomation;
-import net.hydrogen2oxygen.se.IAutomation;
-import net.hydrogen2oxygen.se.Se;
 import net.hydrogen2oxygen.se.exceptions.PreconditionsException;
-import net.hydrogen2oxygen.se.selenium.HyperWebDriver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -15,6 +12,7 @@ import org.jsoup.select.Elements;
 import java.util.ListIterator;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class OpenGithubSearchElectron extends AbstractBaseAutomation {
 
@@ -23,6 +21,7 @@ public class OpenGithubSearchElectron extends AbstractBaseAutomation {
     @Override
     public void checkPreconditions() throws PreconditionsException {
         assertNotNull(wd);
+        assertTrue(ping("github.com"));
     }
 
     @Override

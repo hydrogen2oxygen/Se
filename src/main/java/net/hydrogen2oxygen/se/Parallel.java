@@ -27,7 +27,7 @@ public class Parallel {
     public void run() throws InterruptedException {
         // TODO enable configuration of how many concurrent threads are possible
 
-        ExecutorService es = Executors.newFixedThreadPool(4);
+        ExecutorService es = Executors.newFixedThreadPool(env.getInt("nThreads"));
 
         for (IAutomation automation : automationList) {
             es.execute(new Thread() {
@@ -61,6 +61,7 @@ public class Parallel {
 
         es.shutdown();
         boolean finished = es.awaitTermination(2, TimeUnit.MINUTES);
+        // TODO evaluate finished
     }
 
     /**

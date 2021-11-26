@@ -1,7 +1,6 @@
 package net.hydrogen2oxygen.se;
 
 import net.hydrogen2oxygen.se.exceptions.PreconditionsException;
-import net.hydrogen2oxygen.se.selenium.HyperWebDriver;
 
 /**
  * Every selenium test, automation or snippet implements this interface

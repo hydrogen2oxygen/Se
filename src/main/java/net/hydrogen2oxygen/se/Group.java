@@ -82,6 +82,7 @@ public class Group extends AbstractBaseAutomation {
     @Override
     public void cleanUp() throws Exception {
         // finally, a group always close the driver, ALWAYS
+        logger.info("Closing driver for group " + groupName);
         se.getWebDriver().close();
     }
 
