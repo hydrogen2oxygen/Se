@@ -19,7 +19,7 @@ public class EnvironmentTest {
         exampleEnvironment.getData().put("baseUrl","https://blabla.thisandthat.com");
         exampleEnvironment.getData().put("screenshots.path","target/screenshots/");
         exampleEnvironment.getData().put("nThreads","8");
-        exampleEnvironment.getData().put("ping.timeoout.milliseconds","5000");
+        exampleEnvironment.getData().put("ping.timeout.milliseconds","5000");
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);

@@ -13,7 +13,8 @@ import java.net.UnknownHostException;
  */
 public abstract class AbstractBaseAutomation implements IAutomation {
 
-    public static final String PING_TIMEOOUT = "ping.timeoout.milliseconds";
+    public static final String PING_TIMEOUT = "ping.timeout.milliseconds";
+    public static final int TIME_OUT = 5000;
     private static Logger logger = LogManager.getLogger(AbstractBaseAutomation.class);
 
     protected Se se;
@@ -33,15 +34,30 @@ public abstract class AbstractBaseAutomation implements IAutomation {
      * @return true if success
      */
     public boolean ping(String host) {
+
+        Integer timeOut = getTimeOut();
+
         try {
             InetAddress addr = InetAddress.getByName(host);
-            return addr.isReachable(env.getInt(PING_TIMEOOUT));
+            return addr.isReachable(timeOut);
         } catch (UnknownHostException e) {
             logger.warn("Host " + host + " is unknown!");
             return false;
         } catch (IOException e) {
-            logger.warn("Host " + host + " unreachable, TIMEOUT after " + env.getInt("ping.timeoout") + " seconds !");
+            logger.warn("Host " + host + " unreachable, TIMEOUT after " + timeOut + " seconds !");
             return false;
         }
+    }
+
+    private Integer getTimeOut() {
+
+        Integer timeOut = env.getInt(PING_TIMEOUT);
+
+        if (timeOut == null) {
+            logger.debug(PING_TIMEOUT + " value not set, using default value of " + TIME_OUT + " milliseconds!");
+            timeOut = TIME_OUT;
+        }
+
+        return timeOut;
     }
 }

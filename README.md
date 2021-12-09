@@ -2,6 +2,25 @@
 **Se**(lenium) is a cousin of [HyperSelenium](https://github.com/hydrogen2oxygen/hyperselenium). Both aims to enable a developer to write fast browser automations
 for tests or other purposes. In contrast to Hyperselenium **Se** uses only Java without a script language.
 
+## Download
+### Maven Dependency via JitPack
+Thanks to [JitPack](https://jitpack.io/) you can download **Se** as a dependency into your maven project.
+
+```xml
+	<repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+    
+	<dependency>
+	    <groupId>com.github.hydrogen2oxygen</groupId>
+	    <artifactId>Se</artifactId>
+	    <version>master-SNAPSHOT</version>
+	</dependency>
+```
+
 ## Features
 
 ### Simple automation creation
@@ -65,4 +84,5 @@ Groups are preconditions for many parallel running tasks, in order that they don
 
 ## Planned features
 - Generate HTML protocol for all tests
+- Create a INDEX inside the protocol and a overview of all fails and success
 - Online Server Application that (re)runs tests delivered inside a jar file (by syncing a git repo with JGit) 

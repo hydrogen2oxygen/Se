@@ -39,12 +39,12 @@ public class SeTest {
             // load the environment
             Environment environment = Se.loadEnvironment();
             // add a group
-            Group group1 = new Group(environment, "GitHub1");
+            Group group1 = new Group("GitHub1", environment);
             group1.add(new OpenGithubSearchSelenium());
             group1.add(new OpenGithubSearchHydrogen2oxygen());
 
             // and a second group
-            Group group2 = new Group(environment, "GitHub2");
+            Group group2 = new Group("GitHub2", environment);
             group2.add(new OpenGithubSearchElectron());
             group2.add(new OpenGithubSearchSpringBoot());
 

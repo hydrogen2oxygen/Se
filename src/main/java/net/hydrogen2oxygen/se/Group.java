@@ -34,7 +34,7 @@ public class Group extends AbstractBaseAutomation {
      * @throws IOException
      * @throws EnvironmentException
      */
-    public Group(Environment environment, String groupName) throws HyperWebDriverException, IOException, EnvironmentException {
+    public Group(String groupName, Environment environment) throws HyperWebDriverException, IOException, EnvironmentException {
         this.se = Se.getNewInstance();
         this.se.setEnvironment("./exampleEnvironment.json");
         this.groupName = groupName;
