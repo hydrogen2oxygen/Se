@@ -2,6 +2,7 @@ package net.hydrogen2oxygen.se;
 
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -17,11 +18,13 @@ public class EnvironmentTest {
         exampleEnvironment.setName("simple");
         exampleEnvironment.getData().put("userName","John");
         exampleEnvironment.getData().put("baseUrl","https://blabla.thisandthat.com");
-        exampleEnvironment.getData().put("screenshots.path","target/screenshots/");
+        exampleEnvironment.getData().put(Se.SCREENSHOTS_PATH,"target/screenshots/");
+        exampleEnvironment.getData().put(Se.PROTOCOLS_PATH,"target/protocols/");
         exampleEnvironment.getData().put("nThreads","8");
+        exampleEnvironment.getData().put("parallel.timeout.minutes","15");
         exampleEnvironment.getData().put("ping.timeout.milliseconds","5000");
 
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);;
         objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
         File resultFile = new File("exampleEnvironment.json");
         objectMapper.writeValue(resultFile, exampleEnvironment);

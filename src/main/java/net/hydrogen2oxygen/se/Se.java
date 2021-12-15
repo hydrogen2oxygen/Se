@@ -19,6 +19,7 @@ import java.io.IOException;
 public class Se {
 
     public static final String SCREENSHOTS_PATH = "screenshots.path";
+    public static final String PROTOCOLS_PATH = "protocols.path";
     private static Logger logger = LogManager.getLogger(Se.class);
     private static  Se se;
     private Environment environment;
@@ -30,7 +31,6 @@ public class Se {
         // TODO implement a nice autoConfigurator ... inside the getInstance() method!
         try {
             webDriver = new HyperWebDriver(HyperWebDriver.DriverTypes.LOCAL_CHROME.name(), null, null);
-            webDriver.setScreenshotsPath(environment.getData().get(SCREENSHOTS_PATH));
         } catch (IllegalStateException e) {
             throw new HyperWebDriverException("Check your driver configuration please!", e);
         }
@@ -71,6 +71,20 @@ public class Se {
         return new Se();
     }
 
+    /**
+     * True if the class contains a snippet annotation
+     * @param object
+     * @return boolean
+     */
+    public static boolean isSnippet(Object object) {
+
+        if (object == null) {
+            return false;
+        }
+
+        return object.getClass().isAnnotationPresent(Snippet.class);
+    }
+
     public void setEnvironment(String path) throws IOException {
         setEnvironment(new File(path));
     }
@@ -78,6 +92,10 @@ public class Se {
     public void setEnvironment(File file) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         this.environment = objectMapper.readValue(file, Environment.class);
+    }
+
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
     }
 
     public Environment getEnvironment() {

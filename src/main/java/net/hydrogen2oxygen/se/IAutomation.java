@@ -1,6 +1,7 @@
 package net.hydrogen2oxygen.se;
 
 import net.hydrogen2oxygen.se.exceptions.PreconditionsException;
+import net.hydrogen2oxygen.se.protocol.Protocol;
 
 /**
  * Every selenium test, automation or snippet implements this interface
@@ -27,7 +28,8 @@ public interface IAutomation {
 
     /**
      * Set Se(lenium) (useful for parallel automation inside a group)
-     * @param environment
      */
     void setSe(Se se);
+
+    Protocol getProtocol();
 }

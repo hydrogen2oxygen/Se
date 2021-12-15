@@ -2,6 +2,8 @@ package net.hydrogen2oxygen.se;
 
 import net.hydrogen2oxygen.se.exceptions.EnvironmentException;
 import net.hydrogen2oxygen.se.exceptions.HyperWebDriverException;
+import net.hydrogen2oxygen.se.exceptions.ParallelExecutionException;
+import net.hydrogen2oxygen.se.exceptions.PreconditionsException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,20 +14,23 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class Parallel {
+public class Parallel extends AbstractBaseAutomation {
 
     private static Logger logger = LogManager.getLogger(Parallel.class);
-    private Environment env;
-    private String parallelName;
     private List<IAutomation> automationList = new ArrayList<>();
 
     public Parallel(String parallelName, Environment env) {
-        this.parallelName = parallelName;
         this.env = env;
+        initProtocol(parallelName);
     }
 
-    public void run() throws InterruptedException {
-        // TODO enable configuration of how many concurrent threads are possible
+    @Override
+    public void checkPreconditions() throws PreconditionsException {
+
+    }
+
+    @Override
+    public void run() throws Exception {
 
         ExecutorService es = Executors.newFixedThreadPool(env.getInt("nThreads"));
 
@@ -60,8 +65,16 @@ public class Parallel {
         }
 
         es.shutdown();
-        boolean finished = es.awaitTermination(2, TimeUnit.MINUTES);
-        // TODO evaluate finished
+        boolean finished = es.awaitTermination(env.getInt("parallel.timeout.minutes"), TimeUnit.MINUTES);
+
+        if (!finished) {
+            throw new ParallelExecutionException("Parallel execution not finished after " + env.getInt("parallel.timeout.minutes") + " minutes yet!");
+        }
+    }
+
+    @Override
+    public void cleanUp() throws Exception {
+        wd.close();
     }
 
     /**
@@ -70,5 +83,9 @@ public class Parallel {
      */
     public void add(IAutomation automation) {
         automationList.add(automation);
+    }
+
+    public List<IAutomation> getAutomationList() {
+        return automationList;
     }
 }

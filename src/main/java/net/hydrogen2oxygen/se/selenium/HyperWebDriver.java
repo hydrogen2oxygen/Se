@@ -2,6 +2,7 @@ package net.hydrogen2oxygen.se.selenium;
 
 import net.hydrogen2oxygen.se.exceptions.CommandExecutionException;
 import net.hydrogen2oxygen.se.exceptions.HyperWebDriverException;
+import net.hydrogen2oxygen.se.protocol.Protocol;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -23,10 +24,14 @@ import java.util.function.Function;
 
 public class HyperWebDriver {
 
-    private String screenshotsPath;
     private Boolean closed = false;
     private WebDriver driver;
     private DriverTypes driverType;
+    private Protocol protocol;
+
+    public void setProtocol(Protocol protocol) {
+        this.protocol = protocol;
+    }
 
     public enum DriverTypes {
         LOCAL_CHROME, REMOTE_FIREFOX, REMOTE_CHROME
@@ -96,29 +101,29 @@ public class HyperWebDriver {
     }
 
     public String getScreenshotsPath() {
-        return screenshotsPath;
-    }
-
-    public void setScreenshotsPath(String screenshotsPath) {
-        this.screenshotsPath = screenshotsPath;
+        return protocol.getScreenshotPath();
     }
 
     public HyperWebDriver openPage(String url) {
+        protocol.debug("Open page " + url);
         driver.get(url);
         return this;
     }
 
     public HyperWebDriver sendReturnForElementByName(String name) {
+        protocol.debug("Type ENTER for " + name);
         driver.findElement(By.name(name)).sendKeys(Keys.RETURN);
         return this;
     }
 
     public HyperWebDriver text(String id, String text) {
+        protocol.debug("Set text '" + text + " for ID " + id);
         driver.findElement(By.id(id)).sendKeys(text);
         return this;
     }
 
     public HyperWebDriver textByName(String name, String text) {
+        protocol.debug("Set text '" + text + "' for NAME " + name);
         driver.findElement(By.name(name)).sendKeys(text);
         return this;
     }
@@ -134,17 +139,20 @@ public class HyperWebDriver {
     }
 
     public HyperWebDriver click(String id) {
+        protocol.debug("Click ID " + id);
         driver.findElement(By.id(id)).click();
         return this;
     }
 
     public HyperWebDriver clickName(String name) {
+        protocol.debug("Click NAME " + name);
         driver.findElement(By.name(name)).click();
         return this;
     }
 
     public HyperWebDriver clickTagContainingText(String tag, String text) throws CommandExecutionException {
 
+        protocol.debug("Click Tag containing text '" + text + "'");
         List<WebElement> list = driver.findElements(By.tagName(tag));
 
         boolean clickPerformed = false;
@@ -172,7 +180,9 @@ public class HyperWebDriver {
         }
 
         if (!clickPerformed) {
-            throw new CommandExecutionException(String.format("clickTagContainingText with tag = [%s] and text = [%s] was not successful!", tag, text));
+            String errorMsg = String.format("clickTagContainingText with tag = [%s] and text = [%s] was not successful!", tag, text);
+            protocol.error(errorMsg);
+            throw new CommandExecutionException(errorMsg);
         }
 
         return this;
@@ -180,6 +190,7 @@ public class HyperWebDriver {
 
     public HyperWebDriver selectOption(String id, String optionText) {
 
+        protocol.debug("Select option '" + optionText + "' in ID " + id);
         Select options = new Select(driver.findElement(By.id(id)));
         options.selectByVisibleText(optionText);
 
@@ -188,6 +199,7 @@ public class HyperWebDriver {
 
     public HyperWebDriver selectOption(String id, int index) {
 
+        protocol.debug("Select option with index " + index + " in ID " + id);
         Select options = new Select(driver.findElement(By.id(id)));
         options.selectByIndex(index);
 
@@ -195,16 +207,19 @@ public class HyperWebDriver {
     }
 
     public HyperWebDriver switchToFrame(String id) {
+        protocol.debug("Switch to frame with ID " + id);
         driver.switchTo().frame(id);
         return this;
     }
 
     public HyperWebDriver switchToParentFrame() {
+        protocol.debug("Switch to parent frame");
         driver.switchTo().parentFrame();
         return this;
     }
 
     public void close() {
+        protocol.debug("Close connection to browser");
         closed = true;
         driver.close();
     }
@@ -214,12 +229,14 @@ public class HyperWebDriver {
     }
 
     public HyperWebDriver waitMillis(int millis) throws InterruptedException {
+        protocol.debug("Wait milliseconds " + millis);
         Thread.sleep(millis);
         return this;
     }
 
     public HyperWebDriver waitForElement(String id, int seconds) {
-        WebDriverWait wait = new WebDriverWait(driver, seconds);
+        protocol.debug("Wait for element " + id + " for " + seconds + " seconds");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(seconds));
         wait.until(ExpectedConditions.visibilityOfElementLocated((By
                 .id(id))));
 
@@ -227,7 +244,8 @@ public class HyperWebDriver {
     }
 
     public HyperWebDriver waitForTag(String tagName, int seconds) {
-        WebDriverWait wait = new WebDriverWait(driver, seconds);
+        protocol.debug("Wait for tag " + tagName + " for " + seconds + " seconds");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(seconds));
         wait.until(ExpectedConditions.visibilityOfElementLocated((By
                 .tagName(tagName))));
 
@@ -238,15 +256,16 @@ public class HyperWebDriver {
 
         File file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 
-        if (screenshotsPath != null) {
-            File folder = new File(screenshotsPath);
+        if (protocol.getScreenshotPath() != null) {
+            File folder = new File(protocol.getScreenshotPath());
 
             if (!folder.exists()) {
                 folder.mkdirs();
             }
 
-            File newFile = new File(screenshotsPath + file.getName());
+            File newFile = new File(protocol.getScreenshotPath() + file.getName());
             FileUtils.copyFile(file, newFile);
+            protocol.screenshot(file.getName());
             return newFile;
         }
 
@@ -264,10 +283,13 @@ public class HyperWebDriver {
 
     public void waitForJQuery() {
 
+        protocol.debug("Wait for JQuery");
         waitForJavascript((JavascriptExecutor) driver, "return jQuery.active");
     }
 
     public void waitForJavascript(final String script) {
+
+        protocol.debug("Wait for JavaScript");
         waitForJavascript((JavascriptExecutor) driver, script);
     }
 
@@ -294,5 +316,9 @@ public class HyperWebDriver {
                         return result != null;
                     }
                 });
+    }
+
+    public Protocol getProtocol() {
+        return protocol;
     }
 }

@@ -1,4 +1,4 @@
-package net.hydrogen2oxygen.se.snippets;
+package net.hydrogen2oxygen.se.automations;
 
 import net.hydrogen2oxygen.se.AbstractBaseAutomation;
 import net.hydrogen2oxygen.se.exceptions.PreconditionsException;
@@ -14,9 +14,9 @@ import java.util.ListIterator;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class OpenGithubSearchElectron extends AbstractBaseAutomation {
+public class OpenGithubSearchSelenium extends AbstractBaseAutomation {
 
-    private static Logger logger = LogManager.getLogger(OpenGithubSearchElectron.class);
+    private static Logger logger = LogManager.getLogger(OpenGithubSearchSelenium.class);
 
     @Override
     public void checkPreconditions() throws PreconditionsException {
@@ -28,8 +28,9 @@ public class OpenGithubSearchElectron extends AbstractBaseAutomation {
     public void run() throws Exception {
 
         wd.openPage("https://github.com/hydrogen2oxygen/Se")
-                .waitMillis(1000)
-                .textByName("q", "electron")
+                .waitMillis(1000);
+        wd.getProtocol().h1("Search in Github");
+        wd.textByName("q", "Selenium")
                 .sendReturnForElementByName("q")
                 .screenshot();
 

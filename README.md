@@ -83,6 +83,7 @@ Groups are preconditions for many parallel running tasks, in order that they don
 ```
 
 ## Planned features
+- Block an automation if preconditions was not fulfilled or if assert was false
 - Generate HTML protocol for all tests
 - Create a INDEX inside the protocol and a overview of all fails and success
 - Online Server Application that (re)runs tests delivered inside a jar file (by syncing a git repo with JGit) 

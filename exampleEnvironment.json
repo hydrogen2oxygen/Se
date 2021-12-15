@@ -1,1 +1,12 @@
-{"data":{"nThreads":"8","baseUrl":"https://blabla.thisandthat.com","ping.timeout.milliseconds":"5000","userName":"John","screenshots.path":"target/screenshots/"},"name":"simple"}
+{
+  "data" : {
+    "nThreads" : "8",
+    "baseUrl" : "https://blabla.thisandthat.com",
+    "ping.timeout.milliseconds" : "5000",
+    "parallel.timeout.minutes" : "15",
+    "userName" : "John",
+    "screenshots.path" : "target/screenshots/",
+    "protocols.path" : "target/protocols/"
+  },
+  "name" : "simple"
+}

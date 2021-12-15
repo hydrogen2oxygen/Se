@@ -3,6 +3,7 @@ package net.hydrogen2oxygen.se;
 import net.hydrogen2oxygen.se.exceptions.EnvironmentException;
 import net.hydrogen2oxygen.se.exceptions.HyperWebDriverException;
 import net.hydrogen2oxygen.se.exceptions.PreconditionsException;
+import net.hydrogen2oxygen.se.protocol.Protocol;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,6 +25,7 @@ public class Group extends AbstractBaseAutomation {
     public Group(Se se, String groupName) {
         this.setSe(se);
         this.groupName = groupName;
+        initProtocol(groupName);
     }
 
     /**
@@ -36,10 +38,16 @@ public class Group extends AbstractBaseAutomation {
      */
     public Group(String groupName, Environment environment) throws HyperWebDriverException, IOException, EnvironmentException {
         this.se = Se.getNewInstance();
-        this.se.setEnvironment("./exampleEnvironment.json");
+        this.se.setEnvironment(environment);
+        setSe(se);
         this.groupName = groupName;
+        initProtocol(groupName);
     }
 
+    /**
+     * The automation added to a group will receive all environments from the group
+     * @param automation
+     */
     public void add(IAutomation automation) {
         automation.setSe(se);
         automationList.add(automation);
@@ -83,10 +91,14 @@ public class Group extends AbstractBaseAutomation {
     public void cleanUp() throws Exception {
         // finally, a group always close the driver, ALWAYS
         logger.info("Closing driver for group " + groupName);
-        se.getWebDriver().close();
+        wd.close();
     }
 
     public String getGroupName() {
         return groupName;
+    }
+
+    public List<IAutomation> getAutomationList() {
+        return automationList;
     }
 }

@@ -1,4 +1,4 @@
-package net.hydrogen2oxygen.se.snippets;
+package net.hydrogen2oxygen.se.automations;
 
 import net.hydrogen2oxygen.se.AbstractBaseAutomation;
 import net.hydrogen2oxygen.se.exceptions.PreconditionsException;

@@ -1,10 +1,12 @@
 package net.hydrogen2oxygen.se;
 
+import net.hydrogen2oxygen.se.automations.OpenGithubSearchElectron;
+import net.hydrogen2oxygen.se.automations.OpenGithubSearchHydrogen2oxygen;
+import net.hydrogen2oxygen.se.automations.OpenGithubSearchSelenium;
+import net.hydrogen2oxygen.se.automations.OpenGithubSearchSpringBoot;
+import net.hydrogen2oxygen.se.exceptions.EnvironmentException;
 import net.hydrogen2oxygen.se.exceptions.HyperWebDriverException;
-import net.hydrogen2oxygen.se.snippets.OpenGithubSearchElectron;
-import net.hydrogen2oxygen.se.snippets.OpenGithubSearchHydrogen2oxygen;
-import net.hydrogen2oxygen.se.snippets.OpenGithubSearchSelenium;
-import net.hydrogen2oxygen.se.snippets.OpenGithubSearchSpringBoot;
+import net.hydrogen2oxygen.se.protocol.ProtocolGeneratorHtml;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
@@ -33,7 +35,7 @@ public class SeTest {
     }
 
     @Test
-    public void testParallel() {
+    public void testParallel() throws Exception {
 
         try {
             // load the environment
@@ -54,10 +56,16 @@ public class SeTest {
             parallel.add(group2);
             parallel.run();
 
+            ProtocolGeneratorHtml protocolGeneratorHtml = new ProtocolGeneratorHtml();
+            protocolGeneratorHtml.generateHtml(parallel);
+
         } catch (HyperWebDriverException e) {
             logger.error("Check your driver configuration please!", e);
+        } catch (EnvironmentException e){
+            logger.error("Test not runnable because of missing environment variable!", e);
         } catch (Exception e) {
             logger.error("Unexpected error occured", e);
+            throw e;
         }
     }
 }

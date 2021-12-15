@@ -1,5 +1,7 @@
 package net.hydrogen2oxygen.se;
 
+import net.hydrogen2oxygen.se.exceptions.SnippetException;
+import net.hydrogen2oxygen.se.protocol.Protocol;
 import net.hydrogen2oxygen.se.selenium.HyperWebDriver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,12 +22,38 @@ public abstract class AbstractBaseAutomation implements IAutomation {
     protected Se se;
     protected HyperWebDriver wd;
     protected Environment env;
+    protected Protocol protocol = new Protocol();
 
     @Override
     public void setSe(Se se) {
         this.se = se;
         this.env = se.getEnvironment();
         this.wd = se.getWebDriver();
+
+        if (protocol == null) {
+            // for test purposes, set new only if it is still empty
+            protocol = new Protocol();
+        }
+        protocol.setTitle(this.getClass().getSimpleName());
+        protocol.setProtocolsPath(env.getData().get(Se.PROTOCOLS_PATH));
+        protocol.setScreenshotPath(env.getData().get(Se.SCREENSHOTS_PATH));
+
+        this.wd.setProtocol(protocol);
+    }
+
+    /**
+     * Runs a snippet
+     * @param automation
+     */
+    public void snippet(IAutomation automation) throws Exception {
+        if (!Se.isSnippet(automation)) {
+            throw new SnippetException("The class " + automation.getClass().getName() + " is not a Snippet! You need to annotate snippets!");
+        }
+        automation.setSe(se);
+        automation.checkPreconditions();
+        automation.run();
+        automation.cleanUp();
+        getProtocol().getProtocolEntryList().addAll(automation.getProtocol().getProtocolEntryList());
     }
 
     /**
@@ -41,12 +69,23 @@ public abstract class AbstractBaseAutomation implements IAutomation {
             InetAddress addr = InetAddress.getByName(host);
             return addr.isReachable(timeOut);
         } catch (UnknownHostException e) {
-            logger.warn("Host " + host + " is unknown!");
+            protocol.warn("PING - Host " + host + " is unknown!");
             return false;
         } catch (IOException e) {
-            logger.warn("Host " + host + " unreachable, TIMEOUT after " + timeOut + " seconds !");
+            logger.warn("PING - Host " + host + " unreachable, TIMEOUT after " + timeOut + " seconds !");
             return false;
         }
+    }
+
+    @Override
+    public Protocol getProtocol() {
+        return protocol;
+    }
+
+    public void initProtocol(String title) {
+        protocol.setTitle(title);
+        protocol.setProtocolsPath(env.getData().get(Se.PROTOCOLS_PATH));
+        protocol.setScreenshotPath(env.getData().get(Se.SCREENSHOTS_PATH));
     }
 
     private Integer getTimeOut() {

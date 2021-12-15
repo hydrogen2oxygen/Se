@@ -1,5 +1,10 @@
 package net.hydrogen2oxygen.se.protocol;
 
+import j2html.tags.DomContent;
+import j2html.tags.specialized.DivTag;
+import j2html.tags.specialized.H1Tag;
+import j2html.tags.specialized.SpanTag;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,9 +16,11 @@ public class Protocol {
     private final List<ProtocolEntry> protocolEntryList = new ArrayList<>();
 
     private String title;
+    private String screenshotPath;
+    private String protocolsPath;
 
     public enum ProtocolType {
-        H1,H2,H3,H4,PARAGRAPH,INFO,WARNING,ERROR,PRECONDITION_FAIL,SCREENSHOT,
+        H1,H2,H3,H4,PARAGRAPH,DEBUG,INFO,WARNING,ERROR,PRECONDITION_FAIL,SCREENSHOT,
         SCREENSHOT_WITH_DESCRIPTION,ASSERT_SUCCESS,ASSERT_FAIL,UNEXPECTED_TECHNICAL_ERROR,
         SKIP
     }
@@ -40,6 +47,14 @@ public class Protocol {
 
     public void paragraph(String text) {
         add(ProtocolType.PARAGRAPH, text);
+    }
+
+    /**
+     * Use "debug" for every technical protocol. Debug level can be switched off globally.
+     * @param message
+     */
+    public void debug(String message) {
+        add(ProtocolType.DEBUG, message);
     }
 
     public void info(String message) {
@@ -86,7 +101,7 @@ public class Protocol {
         protocolEntryList.add(new ProtocolEntry(protocolType, data));
     }
 
-    private class ProtocolEntry {
+    public class ProtocolEntry {
 
         private ProtocolType protocolType;
         private String data;
@@ -102,6 +117,19 @@ public class Protocol {
 
         public String getData() {
             return data;
+        }
+
+        public DomContent getDomContent() {
+
+            if (protocolType.equals(ProtocolType.DEBUG)) {
+                return new SpanTag().withClass("debug").withText(data);
+            }
+
+            if (protocolType.equals(ProtocolType.H1)) {
+                return new H1Tag().withText(data);
+            }
+
+            return new DivTag().withText(protocolType.name() + " - " + data);
         }
     }
 
@@ -135,5 +163,33 @@ public class Protocol {
         if (assertSuccess) return ProtocolResult.SUCCESS;
 
         return ProtocolResult.UNKNOWN;
+    }
+
+    public List<ProtocolEntry> getProtocolEntryList() {
+        return protocolEntryList;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getScreenshotPath() {
+        return screenshotPath;
+    }
+
+    public void setScreenshotPath(String screenshotPath) {
+        this.screenshotPath = screenshotPath;
+    }
+
+    public String getProtocolsPath() {
+        return protocolsPath;
+    }
+
+    public void setProtocolsPath(String protocolsPath) {
+        this.protocolsPath = protocolsPath;
     }
 }

@@ -1,17 +1,31 @@
 package net.hydrogen2oxygen.se.protocol;
 
-import org.apache.commons.io.FileUtils;
+import net.hydrogen2oxygen.se.*;
+import net.hydrogen2oxygen.se.exceptions.PreconditionsException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.io.File;
 
 public class ProtocolGeneratorHtmlTest {
 
     @Test
     public void test() throws Exception {
-        Protocol protocol = new Protocol();
+
+        File targetFolder = new File("target");
+        if (!targetFolder.exists()) {
+            targetFolder.mkdirs();
+        }
+
+        System.setProperty("environment","exampleEnvironment.json");
+        Environment environment = Se.loadEnvironment();
+
+        TestAutomation testAutomation = new TestAutomation();
+        Protocol protocol = testAutomation.getProtocol();
+        protocol.setTitle("SingleTest");
+        protocol.setProtocolsPath("target/");
         protocol.h1("Simple Protocol Test");
         protocol.paragraph("This will include hopefully every available element.");
+        protocol.debug("For test purposes!");
         protocol.info("This is a info.");
         protocol.warn("And this is a warning!");
         protocol.error("Beware, this one is a error!!!");
@@ -25,10 +39,38 @@ public class ProtocolGeneratorHtmlTest {
         protocol.screenshot("screenshot8723894723948.jpg");
         protocol.screenshot("screenshot8723894723948.jpg", "The same screenshot, but this time with a nice description");
 
+
+        Group group = new Group("TestGroup", environment);
+        Parallel parallel = new Parallel("ParallelTest", environment);
+
+        group.add(testAutomation);
+        parallel.add(group);
+
         ProtocolGeneratorHtml generatorHtml = new ProtocolGeneratorHtml();
-        String html = generatorHtml.generateHtml(protocol);
-        FileUtils.fileWrite("target/test.html", html);
+        String html = generatorHtml.generateHtml(parallel);
+
+        group.cleanUp();
+
         // FIXME assertTrue(html.contains("Screenshots"), "Should contain the text Screenshots");
+    }
+
+    private class TestAutomation extends AbstractBaseAutomation {
+
+
+        @Override
+        public void checkPreconditions() throws PreconditionsException {
+
+        }
+
+        @Override
+        public void run() throws Exception {
+
+        }
+
+        @Override
+        public void cleanUp() throws Exception {
+
+        }
     }
 
 }
