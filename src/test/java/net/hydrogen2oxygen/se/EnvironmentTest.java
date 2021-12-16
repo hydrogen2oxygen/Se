@@ -3,16 +3,18 @@ package net.hydrogen2oxygen.se;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
-public class EnvironmentTest {
+class EnvironmentTest {
 
     @Test
-    public void testJsonParsing() throws IOException {
+    void testJsonParsing() throws IOException {
 
         Environment exampleEnvironment = new Environment();
         exampleEnvironment.setName("simple");
@@ -25,9 +27,12 @@ public class EnvironmentTest {
         exampleEnvironment.getData().put("parallel.timeout.minutes","15");
         exampleEnvironment.getData().put("ping.timeout.milliseconds","5000");
 
-        ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);;
-        objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
-        File resultFile = new File("exampleEnvironment.json");
+        ObjectMapper objectMapper = JsonMapper.builder()
+                .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
+                .enable(SerializationFeature.INDENT_OUTPUT)
+                .build();
+        File resultFile = Files.createTempFile("environment", "env").toFile();
+        resultFile.deleteOnExit();
         objectMapper.writeValue(resultFile, exampleEnvironment);
 
         exampleEnvironment = objectMapper.readValue(resultFile, Environment.class);
