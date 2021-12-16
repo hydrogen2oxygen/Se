@@ -6,7 +6,7 @@
 
     <groupId>net.hydrogen2oxygen.se</groupId>
     <artifactId>se</artifactId>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.6-SNAPSHOT</version>
     <name>Se(lenium)</name>
     <description>Selenium wrapper which enables groups and parallel execution</description>
     <url>https://github.com/hydrogen2oxygen/Se</url>
