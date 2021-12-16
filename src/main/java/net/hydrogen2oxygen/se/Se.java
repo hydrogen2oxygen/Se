@@ -69,7 +69,7 @@ public class Se {
         InputStream environmentFileInputStream = Se.class.getResourceAsStream(environmentFileString);
 
         if (environmentFileInputStream == null) {
-            throw new EnvironmentException("Unable to load environment " + environmentFileString);
+            throw new EnvironmentException("Unable to load environment: " + environmentFileString);
         }
 
         ObjectMapper objectMapper = new ObjectMapper();

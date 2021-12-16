@@ -8,7 +8,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.UnknownHostException;
 
 /**
@@ -59,21 +63,25 @@ public abstract class AbstractBaseAutomation implements IAutomation {
 
     /**
      * Performs a ping to a host
-     * @param host
+     * @param url
      * @return true if success
      */
-    public boolean ping(String host) {
+    public boolean ping(String url) {
 
         Integer timeOut = getTimeOut();
 
         try {
-            InetAddress addr = InetAddress.getByName(host);
-            return addr.isReachable(timeOut);
-        } catch (UnknownHostException e) {
-            protocol.warn("PING - Host " + host + " is unknown!");
+        	HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setConnectTimeout(timeOut);
+            connection.setReadTimeout(timeOut);
+            connection.setRequestMethod("HEAD");
+            int responseCode = connection.getResponseCode();
+            return (200 <= responseCode && responseCode <= 399);
+        } catch (MalformedURLException e) {
+            protocol.warn("PING - Host " + url + " is unknown!");
             return false;
         } catch (IOException e) {
-            logger.warn("PING - Host " + host + " unreachable, TIMEOUT after " + timeOut + " seconds !");
+            logger.warn("PING - Host " + url + " unreachable");
             return false;
         }
     }
