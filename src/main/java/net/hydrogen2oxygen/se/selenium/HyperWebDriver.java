@@ -58,13 +58,13 @@ public class HyperWebDriver {
             System.setProperty("webdriver.chrome.driver", seleniumDriverDirectory + "/chromedriver.exe");
         }
 
-        if (DriverTypes.LOCAL_CHROME.name().equals(driverType)) {
+        if (DriverTypes.LOCAL_CHROME.equals(driverType)) {
 
             ChromeOptions chromeOptions = new ChromeOptions();
             chromeOptions.setHeadless(false);
             driver = new ChromeDriver(chromeOptions);
 
-        } else if (DriverTypes.REMOTE_FIREFOX.name().equals(driverType)) {
+        } else if (DriverTypes.REMOTE_FIREFOX.equals(driverType)) {
 
             try {
                 FirefoxOptions options = new FirefoxOptions();
@@ -75,7 +75,7 @@ public class HyperWebDriver {
                 e.printStackTrace();
             }
 
-        } else if (DriverTypes.REMOTE_CHROME.name().equals(driverType)) {
+        } else if (DriverTypes.REMOTE_CHROME.equals(driverType)) {
 
             try {
                 ChromeOptions options = new ChromeOptions();

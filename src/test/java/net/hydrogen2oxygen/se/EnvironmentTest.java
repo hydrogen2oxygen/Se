@@ -18,7 +18,7 @@ public class EnvironmentTest {
         exampleEnvironment.setName("simple");
         exampleEnvironment.getData().put("userName","John");
         exampleEnvironment.getData().put("baseUrl","https://blabla.thisandthat.com");
-        exampleEnvironment.getData().put(Se.SCREENSHOTS_PATH,"target/screenshots/");
+        exampleEnvironment.getData().put(Se.SCREENSHOTS_PATH,"target/protocols/");
         exampleEnvironment.getData().put(Se.PROTOCOLS_PATH,"target/protocols/");
         exampleEnvironment.getData().put("nThreads","8");
         exampleEnvironment.getData().put("parallel.timeout.minutes","15");
