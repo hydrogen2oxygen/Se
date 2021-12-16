@@ -125,6 +125,7 @@ public class Se {
     public void run(IAutomation automation) {
         try {
             logger.info("Running automation " + automation.getClass().getSimpleName());
+            automation.setSe(se);
             automation.checkPreconditions();
             automation.run();
             automation.cleanUp();
