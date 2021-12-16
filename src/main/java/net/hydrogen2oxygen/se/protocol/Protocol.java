@@ -101,10 +101,10 @@ public class Protocol {
         protocolEntryList.add(new ProtocolEntry(protocolType, data));
     }
 
-    public class ProtocolEntry {
+    public static class ProtocolEntry {
 
-        private ProtocolType protocolType;
-        private String data;
+        private final ProtocolType protocolType;
+        private final String data;
 
         public ProtocolEntry(ProtocolType protocolType, String data) {
             this.protocolType = protocolType;
@@ -121,15 +121,14 @@ public class Protocol {
 
         public DomContent getDomContent() {
 
-            if (protocolType.equals(ProtocolType.DEBUG)) {
-                return new SpanTag().withClass("debug").withText(data);
+            switch (this.protocolType) {
+                case DEBUG:
+                    return new SpanTag().withClass("debug").withText(data);
+                case H1:
+                    return new H1Tag().withText(data);
+                default:
+                    return new DivTag().withText(protocolType.name() + " - " + data);
             }
-
-            if (protocolType.equals(ProtocolType.H1)) {
-                return new H1Tag().withText(data);
-            }
-
-            return new DivTag().withText(protocolType.name() + " - " + data);
         }
     }
 
@@ -139,24 +138,20 @@ public class Protocol {
 
         for (ProtocolEntry entry : protocolEntryList) {
 
-            if (entry.protocolType.equals(ProtocolType.UNEXPECTED_TECHNICAL_ERROR)) {
-                return ProtocolResult.TECHNICAL_ERROR;
-            }
-
-            if (entry.protocolType.equals(ProtocolType.ASSERT_FAIL)) {
-                return ProtocolResult.FAIL;
-            }
-
-            if (entry.protocolType.equals(ProtocolType.PRECONDITION_FAIL)) {
-                return ProtocolResult.PRECONDITION_FAIL;
-            }
-
-            if (entry.protocolType.equals(ProtocolType.SKIP)) {
-                return ProtocolResult.SKIPPED;
-            }
-
-            if (entry.protocolType.equals(ProtocolType.ASSERT_SUCCESS)) {
-                assertSuccess = true;
+            switch (entry.protocolType) {
+                case UNEXPECTED_TECHNICAL_ERROR:
+                    return ProtocolResult.TECHNICAL_ERROR;
+                case ASSERT_FAIL:
+                    return ProtocolResult.FAIL;
+                case PRECONDITION_FAIL:
+                    return ProtocolResult.PRECONDITION_FAIL;
+                case SKIP:
+                    return ProtocolResult.SKIPPED;
+                case ASSERT_SUCCESS:
+                    assertSuccess = true;
+                    break;
+                default:
+                    // nothing (all other types are no "result types")
             }
         }
 

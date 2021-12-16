@@ -3,7 +3,6 @@ package net.hydrogen2oxygen.se;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.hydrogen2oxygen.se.exceptions.EnvironmentException;
 import net.hydrogen2oxygen.se.exceptions.HyperWebDriverException;
-import net.hydrogen2oxygen.se.exceptions.PreconditionsException;
 import net.hydrogen2oxygen.se.selenium.HyperWebDriver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,9 +23,9 @@ public class Se {
     public static final String PROTOCOLS_PATH = "protocols.path";
     public static final String HEADLESS = "headless";
     public static final String ENVIRONMENT = "environment";
-    private static Logger logger = LogManager.getLogger(Se.class);
+    private static final Logger logger = LogManager.getLogger(Se.class);
     private Environment environment;
-    private HyperWebDriver webDriver;
+    private final HyperWebDriver webDriver;
 
     private Se(Environment env, HyperWebDriver.DriverTypes webDriverType) throws HyperWebDriverException, EnvironmentException, IOException {
         init(env, webDriverType);
@@ -56,7 +55,7 @@ public class Se {
     }
 
     public static Environment loadEnvironment() throws EnvironmentException, IOException {
-        return loadEnvironment(System.getProperty("environment"));
+        return loadEnvironment(System.getProperty(ENVIRONMENT));
     }
 
     public static Environment loadEnvironment(String environmentFileString) throws EnvironmentException, IOException {
@@ -65,8 +64,7 @@ public class Se {
             throw new EnvironmentException("No environment provided. You cannot switch an environment without proper configuration. But you can still work with the standard automation.");
         }
 
-        logger.info("Loading environment " + environmentFileString);
-
+        logger.info("Loading environment {}", environmentFileString);
 
         InputStream environmentFileInputStream = Se.class.getResourceAsStream(environmentFileString);
 
@@ -90,8 +88,8 @@ public class Se {
 
     /**
      * True if the class contains a snippet annotation
-     * @param object
-     * @return boolean
+     * @param object to check
+     * @return true if class of object has annotation {@link Snippet}
      */
     public static boolean isSnippet(Object object) {
 
@@ -116,15 +114,13 @@ public class Se {
 
     public void run(IAutomation automation) {
         try {
-            logger.info("Running automation " + automation.getClass().getSimpleName());
+            logger.info("Running automation {}", automation.getClass().getSimpleName());
             automation.setSe(this);
             automation.checkPreconditions();
             automation.run();
             automation.cleanUp();
-        } catch (PreconditionsException pe) {
+        } catch (Exception pe) {
             logger.error(pe);
-        } catch (Exception e) {
-            logger.error(e);
         }
     }
 
