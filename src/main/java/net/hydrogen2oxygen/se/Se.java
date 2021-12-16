@@ -1,15 +1,19 @@
 package net.hydrogen2oxygen.se;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import net.bytebuddy.asm.Advice.This;
 import net.hydrogen2oxygen.se.exceptions.EnvironmentException;
 import net.hydrogen2oxygen.se.exceptions.HyperWebDriverException;
 import net.hydrogen2oxygen.se.exceptions.PreconditionsException;
 import net.hydrogen2oxygen.se.selenium.HyperWebDriver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.checkerframework.common.reflection.qual.GetClass;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * 1) Download the proper Browser Driver (chromedriver.exe for example) or set up a docker module for selenium
@@ -24,7 +28,6 @@ public class Se {
     public static final String HEADLESS = "headless";
     public static final String ENVIRONMENT = "environment";
     private static Logger logger = LogManager.getLogger(Se.class);
-    private static  Se se;
     private Environment environment;
     private HyperWebDriver webDriver;
 
@@ -62,31 +65,26 @@ public class Se {
         }
 
         logger.info("Loading environment " + environmentFileString);
-        File environmentFile = new File(environmentFileString);
+        
+        
+        InputStream environmentFileInputStream = Se.class.getResourceAsStream(environmentFileString);
+        
 
-        if (!environmentFile.exists()) {
+        if (environmentFileInputStream == null) {
             throw new EnvironmentException("Unable to load environment " + environmentFileString);
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(environmentFile, Environment.class);
+        return objectMapper.readValue(environmentFileInputStream, Environment.class);
     }
 
     public static Se getInstance() throws HyperWebDriverException, EnvironmentException, IOException {
 
-        if (se == null) {
-            se = new Se(null, null);
-        }
-
-        return se;
+    	return  new Se(null, null);
     }
 
-    public static Se getNewInstance() throws HyperWebDriverException, EnvironmentException, IOException {
 
-        return new Se(null, null);
-    }
-
-    public static Se getNewInstance(Environment env, HyperWebDriver.DriverTypes webDriverType) throws HyperWebDriverException, EnvironmentException, IOException {
+    public static Se getInstance(Environment env, HyperWebDriver.DriverTypes webDriverType) throws HyperWebDriverException, EnvironmentException, IOException {
 
         return new Se(env, webDriverType);
     }
@@ -125,6 +123,7 @@ public class Se {
     public void run(IAutomation automation) {
         try {
             logger.info("Running automation " + automation.getClass().getSimpleName());
+            automation.setSe(this);
             automation.checkPreconditions();
             automation.run();
             automation.cleanUp();
