@@ -1,7 +1,6 @@
 package net.hydrogen2oxygen.se;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import net.hydrogen2oxygen.se.exceptions.EnvironmentException;
 import net.hydrogen2oxygen.se.exceptions.HyperWebDriverException;
 import net.hydrogen2oxygen.se.selenium.HyperWebDriver;
@@ -29,6 +28,10 @@ public class Se {
     private final HyperWebDriver webDriver;
 
     private Se(Environment env, HyperWebDriver.DriverTypes webDriverType) throws HyperWebDriverException, EnvironmentException, IOException {
+        init(env, webDriverType);
+    }
+
+    private void init(Environment env, HyperWebDriver.DriverTypes webDriverType) throws HyperWebDriverException, EnvironmentException, IOException {
 
         if (env == null) {
             environment = loadEnvironment(System.getProperty(ENVIRONMENT));
@@ -78,7 +81,6 @@ public class Se {
     	return  new Se(null, null);
     }
 
-
     public static Se getInstance(Environment env, HyperWebDriver.DriverTypes webDriverType) throws HyperWebDriverException, EnvironmentException, IOException {
 
         return new Se(env, webDriverType);
@@ -98,13 +100,8 @@ public class Se {
         return object.getClass().isAnnotationPresent(Snippet.class);
     }
 
-    public void setEnvironment(String path) throws IOException {
-        setEnvironment(new File(path));
-    }
-
-    public void setEnvironment(File file) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        this.environment = objectMapper.readValue(file, Environment.class);
+    public void setEnvironment(String path) throws IOException, EnvironmentException {
+        this.environment = loadEnvironment(path);
     }
 
     public void setEnvironment(Environment environment) {

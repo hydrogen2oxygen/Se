@@ -25,11 +25,6 @@ public class Parallel extends AbstractBaseAutomation {
     }
 
     @Override
-    public void checkPreconditions() throws PreconditionsException {
-
-    }
-
-    @Override
     public void run() throws Exception {
 
         ExecutorService es = Executors.newFixedThreadPool(env.getInt("nThreads"));
@@ -37,6 +32,8 @@ public class Parallel extends AbstractBaseAutomation {
         for (IAutomation automation : automationList) {
             es.execute(new Thread() {
                 public void run() {
+                    // TODO evaluate to instance the WebDriver here instead inside the Group / Se class
+                    // https://www.baeldung.com/java-threadlocal
                     if (automation instanceof Group) {
                         Group group = (Group) automation;
                         try {
