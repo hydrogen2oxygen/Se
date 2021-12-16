@@ -19,6 +19,7 @@ import java.io.InputStream;
 public class Se {
 
     public static final String WEBDRIVER_CHROME_DRIVER = "webdriver.chrome.driver";
+    public static final String WEBDRIVER_TYPE = "webdriver.type";
     public static final String SCREENSHOTS_PATH = "screenshots.path";
     public static final String PROTOCOLS_PATH = "protocols.path";
     public static final String HEADLESS = "headless";
@@ -37,6 +38,10 @@ public class Se {
             environment = loadEnvironment(System.getProperty(ENVIRONMENT));
         } else {
             environment = env;
+        }
+
+        if (webDriverType == null && environment.get(WEBDRIVER_TYPE) != null) {
+            webDriverType = HyperWebDriver.DriverTypes.valueOf(environment.get(WEBDRIVER_TYPE));
         }
 
         if (webDriverType == null) {
