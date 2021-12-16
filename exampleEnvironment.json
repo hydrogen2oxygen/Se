@@ -1,5 +1,6 @@
 {
   "data" : {
+    "headless" : "true",
     "nThreads" : "8",
     "baseUrl" : "https://blabla.thisandthat.com",
     "ping.timeout.milliseconds" : "5000",

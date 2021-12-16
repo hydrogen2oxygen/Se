@@ -39,4 +39,8 @@ public class Environment {
     public void addEnvironment(Environment env) {
         data.putAll(env.getData());
     }
+
+    public boolean getBoolean(String key) {
+        return Boolean.parseBoolean(get(key));
+    }
 }

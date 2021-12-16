@@ -1,5 +1,6 @@
 package net.hydrogen2oxygen.se;
 
+import net.hydrogen2oxygen.se.exceptions.PreconditionsException;
 import net.hydrogen2oxygen.se.exceptions.SnippetException;
 import net.hydrogen2oxygen.se.protocol.Protocol;
 import net.hydrogen2oxygen.se.selenium.HyperWebDriver;
@@ -99,4 +100,15 @@ public abstract class AbstractBaseAutomation implements IAutomation {
 
         return timeOut;
     }
+
+    @Override
+    public void checkPreconditions() throws PreconditionsException {
+
+    }
+
+    @Override
+    public void cleanUp() throws Exception {
+
+    }
+
 }

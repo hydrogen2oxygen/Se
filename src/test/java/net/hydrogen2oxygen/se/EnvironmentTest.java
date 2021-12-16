@@ -20,6 +20,7 @@ public class EnvironmentTest {
         exampleEnvironment.getData().put("baseUrl","https://blabla.thisandthat.com");
         exampleEnvironment.getData().put(Se.SCREENSHOTS_PATH,"target/protocols/");
         exampleEnvironment.getData().put(Se.PROTOCOLS_PATH,"target/protocols/");
+        exampleEnvironment.getData().put(Se.HEADLESS,"true");
         exampleEnvironment.getData().put("nThreads","8");
         exampleEnvironment.getData().put("parallel.timeout.minutes","15");
         exampleEnvironment.getData().put("ping.timeout.milliseconds","5000");

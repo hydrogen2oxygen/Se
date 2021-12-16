@@ -6,7 +6,7 @@
 
     <groupId>net.hydrogen2oxygen.se</groupId>
     <artifactId>se</artifactId>
-    <version>1.0.6-SNAPSHOT</version>
+    <version>1.0.7-SNAPSHOT</version>
     <name>Se(lenium)</name>
     <description>Selenium wrapper which enables groups and parallel execution</description>
     <url>https://github.com/hydrogen2oxygen/Se</url>
@@ -54,6 +54,12 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>${selenium.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>5.0.3</version>
         </dependency>
 
         <dependency>

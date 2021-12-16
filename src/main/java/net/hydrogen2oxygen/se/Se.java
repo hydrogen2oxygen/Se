@@ -18,8 +18,10 @@ import java.io.IOException;
  */
 public class Se {
 
+    public static final String WEBDRIVER_CHROME_DRIVER = "webdriver.chrome.driver";
     public static final String SCREENSHOTS_PATH = "screenshots.path";
     public static final String PROTOCOLS_PATH = "protocols.path";
+    public static final String HEADLESS = "headless";
     public static final String ENVIRONMENT = "environment";
     private static Logger logger = LogManager.getLogger(Se.class);
     private static  Se se;
@@ -38,8 +40,12 @@ public class Se {
             webDriverType = HyperWebDriver.DriverTypes.LOCAL_CHROME;
         }
 
+        if (environment.get(WEBDRIVER_CHROME_DRIVER) != null) {
+            System.setProperty(WEBDRIVER_CHROME_DRIVER, environment.get(WEBDRIVER_CHROME_DRIVER));
+        }
+
         try {
-            webDriver = new HyperWebDriver(webDriverType, null, null);
+            webDriver = new HyperWebDriver(webDriverType, null, null, environment.getBoolean(Se.HEADLESS));
         } catch (IllegalStateException e) {
             throw new HyperWebDriverException("Check your driver configuration please!", e);
         }

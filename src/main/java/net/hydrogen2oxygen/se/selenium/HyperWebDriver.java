@@ -38,15 +38,15 @@ public class HyperWebDriver {
     }
 
     public HyperWebDriver(HyperWebDriver.DriverTypes driverType) throws HyperWebDriverException {
-        init(driverType, null, null);
+        init(driverType, null, null, false);
     }
 
-    public HyperWebDriver(HyperWebDriver.DriverTypes driverType, String remoteUrl, String seleniumDriverDirectory) throws HyperWebDriverException {
+    public HyperWebDriver(HyperWebDriver.DriverTypes driverType, String remoteUrl, String seleniumDriverDirectory, boolean headless) throws HyperWebDriverException {
 
-        init(driverType, remoteUrl, seleniumDriverDirectory);
+        init(driverType, remoteUrl, seleniumDriverDirectory, headless);
     }
 
-    private void init(HyperWebDriver.DriverTypes driverType, String remoteUrl, String seleniumDriverDirectory) throws HyperWebDriverException {
+    private void init(HyperWebDriver.DriverTypes driverType, String remoteUrl, String seleniumDriverDirectory, boolean headless) throws HyperWebDriverException {
 
         this.driverType = driverType;
 
@@ -60,8 +60,9 @@ public class HyperWebDriver {
 
         if (DriverTypes.LOCAL_CHROME.equals(driverType)) {
 
+            // TODO enably by option WebDriverManager.chromedriver().setup();
             ChromeOptions chromeOptions = new ChromeOptions();
-            chromeOptions.setHeadless(false);
+            chromeOptions.setHeadless(headless);
             driver = new ChromeDriver(chromeOptions);
 
         } else if (DriverTypes.REMOTE_FIREFOX.equals(driverType)) {
