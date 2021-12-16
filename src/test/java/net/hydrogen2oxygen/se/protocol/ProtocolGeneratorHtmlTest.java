@@ -16,8 +16,7 @@ public class ProtocolGeneratorHtmlTest {
             targetFolder.mkdirs();
         }
 
-        System.setProperty("environment","exampleEnvironment.json");
-        Environment environment = Se.loadEnvironment();
+        Environment environment = Se.loadEnvironment("/exampleEnvironment.json");
 
         TestAutomation testAutomation = new TestAutomation();
         Protocol protocol = testAutomation.getProtocol();
