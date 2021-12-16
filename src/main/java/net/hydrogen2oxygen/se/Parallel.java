@@ -46,7 +46,7 @@ public class Parallel extends AbstractBaseAutomation {
                     } else {
 
                             try {
-                                Se se = Se.getNewInstance();
+                                Se se = Se.getInstance();
                                 se.run(automation);
                                 se.getWebDriver().close();
                             } catch (HyperWebDriverException e) {

@@ -8,6 +8,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.opentest4j.AssertionFailedError;
 
 import java.util.ListIterator;
 
@@ -20,8 +21,12 @@ public class OpenGithubSearchSelenium extends AbstractBaseAutomation {
 
     @Override
     public void checkPreconditions() throws PreconditionsException {
-        assertNotNull(wd);
-        assertTrue(ping("github.com"));
+        try {
+            assertNotNull(wd);
+            assertTrue(ping("github.com"));
+        } catch (AssertionFailedError e ) {
+            throw new PreconditionsException("Precondition failed", e);
+        }
     }
 
     @Override
