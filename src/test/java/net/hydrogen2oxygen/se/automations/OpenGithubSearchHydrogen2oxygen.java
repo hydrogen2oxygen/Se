@@ -1,7 +1,9 @@
 package net.hydrogen2oxygen.se.automations;
 
 import net.hydrogen2oxygen.se.AbstractBaseAutomation;
+import net.hydrogen2oxygen.se.exceptions.CleanUpException;
 import net.hydrogen2oxygen.se.exceptions.PreconditionsException;
+import net.hydrogen2oxygen.se.exceptions.WrappedCheckedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -9,6 +11,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.util.ListIterator;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -25,13 +28,17 @@ public class OpenGithubSearchHydrogen2oxygen extends AbstractBaseAutomation {
     }
 
     @Override
-    public void run() throws Exception {
+    public void run() {
 
-        wd.openPage("https://github.com/hydrogen2oxygen/Se")
-                .waitMillis(1000)
-                .textByName("q", "hydrogen2oxygen")
-                .sendReturnForElementByName("q")
-                .screenshot();
+        try {
+            wd.openPage("https://github.com/hydrogen2oxygen/Se")
+                    .waitMillis(1000)
+                    .textByName("q", "hydrogen2oxygen")
+                    .sendReturnForElementByName("q")
+                    .screenshot();
+        } catch (Exception e) {
+            throw new WrappedCheckedException(e);
+        }
 
         String html = wd.getHtml();
         Document doc = Jsoup.parse(html);
@@ -45,7 +52,7 @@ public class OpenGithubSearchHydrogen2oxygen extends AbstractBaseAutomation {
     }
 
     @Override
-    public void cleanUp() throws Exception {
+    public void cleanUp() throws CleanUpException {
         //wd.close(); ... don't do this inside a snippet or inside a automation intended to run inside a group
     }
 }

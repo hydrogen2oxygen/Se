@@ -20,7 +20,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.List;
-import java.util.function.Function;
 
 public class HyperWebDriver {
 
@@ -162,11 +161,7 @@ public class HyperWebDriver {
 
             String elementText = element.getText().trim();
 
-            if (elementText == null || elementText.trim().length() == 0) {
-                continue;
-            }
-
-            if (elementText.contains(text)) {
+            if (elementText.length() > 0 && elementText.contains(text)) {
                 try {
                     element.click();
                 } catch (ElementNotInteractableException e) {
@@ -296,26 +291,25 @@ public class HyperWebDriver {
 
     private void waitForJavascript(final JavascriptExecutor executor, final String script) {
         new FluentWait<JavascriptExecutor>(executor) {
+            @Override
             protected RuntimeException timeoutException(
                     String message, Throwable lastException) {
                 return new RuntimeException(message);
             }
         }.withTimeout(Duration.ofSeconds(10))
-                .until(new Function<JavascriptExecutor, Boolean>() {
-                    public Boolean apply(JavascriptExecutor e) {
+                .until(e -> {
 
-                        Object result = executor.executeScript(script);
+                    Object result = executor.executeScript(script);
 
-                        if (result instanceof Long) {
-                            return (Long) result == 0;
-                        }
-
-                        if (result instanceof Boolean) {
-                            return (Boolean) result;
-                        }
-
-                        return result != null;
+                    if (result instanceof Long) {
+                        return (Long) result == 0;
                     }
+
+                    if (result instanceof Boolean) {
+                        return (Boolean) result;
+                    }
+
+                    return result != null;
                 });
     }
 

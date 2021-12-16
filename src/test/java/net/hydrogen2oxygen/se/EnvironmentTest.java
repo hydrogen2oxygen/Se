@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import net.hydrogen2oxygen.se.selenium.HyperWebDriver;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -23,6 +24,7 @@ class EnvironmentTest {
         exampleEnvironment.getData().put(Se.SCREENSHOTS_PATH,"target/protocols/");
         exampleEnvironment.getData().put(Se.PROTOCOLS_PATH,"target/protocols/");
         exampleEnvironment.getData().put(Se.HEADLESS,"true");
+        exampleEnvironment.getData().put(Se.WEBDRIVER_TYPE, HyperWebDriver.DriverTypes.LOCAL_CHROME.name());
         exampleEnvironment.getData().put("nThreads","8");
         exampleEnvironment.getData().put("parallel.timeout.minutes","15");
         exampleEnvironment.getData().put("ping.timeout.milliseconds","5000");

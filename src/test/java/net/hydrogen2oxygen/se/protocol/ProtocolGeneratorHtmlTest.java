@@ -1,22 +1,23 @@
 package net.hydrogen2oxygen.se.protocol;
 
 import net.hydrogen2oxygen.se.*;
+import net.hydrogen2oxygen.se.exceptions.CleanUpException;
 import net.hydrogen2oxygen.se.exceptions.PreconditionsException;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-public class ProtocolGeneratorHtmlTest {
+class ProtocolGeneratorHtmlTest {
 
     @Test
-    public void test() throws Exception {
+    void test() throws Exception {
 
         File targetFolder = new File("target");
         if (!targetFolder.exists()) {
             targetFolder.mkdirs();
         }
 
-        System.setProperty("environment","exampleEnvironment.json");
+        System.setProperty("environment","/exampleEnvironment.json");
         Environment environment = Se.loadEnvironment();
 
         TestAutomation testAutomation = new TestAutomation();
@@ -63,12 +64,12 @@ public class ProtocolGeneratorHtmlTest {
         }
 
         @Override
-        public void run() throws Exception {
+        public void run() {
 
         }
 
         @Override
-        public void cleanUp() throws Exception {
+        public void cleanUp() throws CleanUpException {
 
         }
     }
