@@ -37,18 +37,18 @@ public class HyperWebDriver {
         LOCAL_CHROME, REMOTE_FIREFOX, REMOTE_CHROME
     }
 
-    public HyperWebDriver(String driverType) throws HyperWebDriverException {
+    public HyperWebDriver(HyperWebDriver.DriverTypes driverType) throws HyperWebDriverException {
         init(driverType, null, null);
     }
 
-    public HyperWebDriver(String driverType, String remoteUrl, String seleniumDriverDirectory) throws HyperWebDriverException {
+    public HyperWebDriver(HyperWebDriver.DriverTypes driverType, String remoteUrl, String seleniumDriverDirectory) throws HyperWebDriverException {
 
         init(driverType, remoteUrl, seleniumDriverDirectory);
     }
 
-    private void init(String driverType, String remoteUrl, String seleniumDriverDirectory) throws HyperWebDriverException {
+    private void init(HyperWebDriver.DriverTypes driverType, String remoteUrl, String seleniumDriverDirectory) throws HyperWebDriverException {
 
-        this.driverType = DriverTypes.valueOf(driverType);
+        this.driverType = driverType;
 
         if (seleniumDriverDirectory == null || seleniumDriverDirectory.trim().length() == 0) {
             seleniumDriverDirectory = "..";

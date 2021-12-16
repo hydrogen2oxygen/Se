@@ -20,17 +20,26 @@ public class Se {
 
     public static final String SCREENSHOTS_PATH = "screenshots.path";
     public static final String PROTOCOLS_PATH = "protocols.path";
+    public static final String ENVIRONMENT = "environment";
     private static Logger logger = LogManager.getLogger(Se.class);
     private static  Se se;
     private Environment environment;
     private HyperWebDriver webDriver;
 
-    private Se() throws HyperWebDriverException, EnvironmentException, IOException {
+    private Se(Environment env, HyperWebDriver.DriverTypes webDriverType) throws HyperWebDriverException, EnvironmentException, IOException {
 
-        environment = loadEnvironment(System.getProperty("environment"));
-        // TODO implement a nice autoConfigurator ... inside the getInstance() method!
+        if (env == null) {
+            environment = loadEnvironment(System.getProperty(ENVIRONMENT));
+        } else {
+            environment = env;
+        }
+
+        if (webDriverType == null) {
+            webDriverType = HyperWebDriver.DriverTypes.LOCAL_CHROME;
+        }
+
         try {
-            webDriver = new HyperWebDriver(HyperWebDriver.DriverTypes.LOCAL_CHROME.name(), null, null);
+            webDriver = new HyperWebDriver(webDriverType, null, null);
         } catch (IllegalStateException e) {
             throw new HyperWebDriverException("Check your driver configuration please!", e);
         }
@@ -60,7 +69,7 @@ public class Se {
     public static Se getInstance() throws HyperWebDriverException, EnvironmentException, IOException {
 
         if (se == null) {
-            se = new Se();
+            se = new Se(null, null);
         }
 
         return se;
@@ -68,7 +77,12 @@ public class Se {
 
     public static Se getNewInstance() throws HyperWebDriverException, EnvironmentException, IOException {
 
-        return new Se();
+        return new Se(null, null);
+    }
+
+    public static Se getNewInstance(Environment env, HyperWebDriver.DriverTypes webDriverType) throws HyperWebDriverException, EnvironmentException, IOException {
+
+        return new Se(env, webDriverType);
     }
 
     /**
