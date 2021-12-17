@@ -2,3 +2,5 @@
 /target/
 /Se.iml
 /logs/
+/.classpath
+/.project
