@@ -7,6 +7,7 @@ import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.devtools.v85.io.IO;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -249,6 +250,9 @@ public class HyperWebDriver {
     }
 
     public File screenshot() throws IOException {
+        return screenshot(null, null);
+    }
+    public File screenshot(String title, String description) throws IOException {
 
         File file = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 
@@ -261,7 +265,12 @@ public class HyperWebDriver {
 
             File newFile = new File(protocol.getScreenshotPath() + file.getName());
             FileUtils.copyFile(file, newFile);
-            protocol.screenshot(file.getName());
+
+            if (title != null) {
+                protocol.screenshot(title, description, file.getName());
+            } else {
+                protocol.screenshot(file.getName());
+            }
             return newFile;
         }
 
