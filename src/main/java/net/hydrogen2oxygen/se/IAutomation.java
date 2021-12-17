@@ -1,12 +1,13 @@
 package net.hydrogen2oxygen.se;
 
+import net.hydrogen2oxygen.se.exceptions.CleanUpException;
 import net.hydrogen2oxygen.se.exceptions.PreconditionsException;
 import net.hydrogen2oxygen.se.protocol.Protocol;
 
 /**
  * Every selenium test, automation or snippet implements this interface
  */
-public interface IAutomation {
+public interface IAutomation extends Runnable {
 
     /**
      * This works also as a prepare method, because it runs before everything else
@@ -15,19 +16,14 @@ public interface IAutomation {
     void checkPreconditions () throws PreconditionsException;
 
     /**
-     * Main run method of the automation
-     * @throws Exception thrown usually when unexpected errors occurs
-     */
-    void run() throws Exception;
-
-    /**
      * Clean up the mess afterwards
-     * @throws Exception thrown usually when unexpected errors occurs
+     * @throws CleanUpException thrown usually when unexpected errors occurs
      */
-    void cleanUp() throws Exception;
+    void cleanUp() throws CleanUpException;
 
     /**
      * Set Se(lenium) (useful for parallel automation inside a group)
+     * @param se {@link Se} instance to use
      */
     void setSe(Se se);
 
