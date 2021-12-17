@@ -3,11 +3,21 @@ package net.hydrogen2oxygen.se.protocol;
 import net.hydrogen2oxygen.se.*;
 import net.hydrogen2oxygen.se.exceptions.CleanUpException;
 import net.hydrogen2oxygen.se.exceptions.PreconditionsException;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.IOException;
 
 class ProtocolGeneratorHtmlTest {
+
+    @BeforeAll
+    public static void init() throws IOException {
+        FileUtils.copyFile(
+                new File("src/test/resources/images/screenshot.png"),
+                new File("target/protocols/screenshot.png"));
+    }
 
     @Test
     void test() throws Exception {
@@ -37,9 +47,8 @@ class ProtocolGeneratorHtmlTest {
         protocol.preconditionFail("... like for example if a precondition fails ...");
         protocol.unexpectedTechnicalError("or even an unexpected technical error occurs");
         protocol.h4("Screenshots");
-        protocol.screenshot("screenshot8723894723948.jpg");
-        protocol.screenshot("screenshot8723894723948.jpg", "The same screenshot, but this time with a nice description");
-
+        protocol.screenshot("screenshot.png");
+        protocol.screenshot("screenshot.png", "SCREENSHOT TITLE", "The same screenshot, but this time with a nice description");
 
         Group group = new Group("TestGroup", environment);
         Parallel parallel = new Parallel("ParallelTest", environment);
