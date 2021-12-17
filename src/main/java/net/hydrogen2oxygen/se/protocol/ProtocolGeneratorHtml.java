@@ -42,9 +42,9 @@ public class ProtocolGeneratorHtml {
                 ),
                 body(
                         div(attrs("#protocol"),
-                                protocol.getProtocolEntryList().stream().map(p ->
-                                        p.getDomContent()
-                                ).toArray(ContainerTag[]::new)
+                                protocol.getProtocolEntryList().stream()
+                                        .map(Protocol.ProtocolEntry::getDomContent)
+                                        .toArray(j2html.tags.DomContent[]::new)
                         )
                 )
         ).renderFormatted();

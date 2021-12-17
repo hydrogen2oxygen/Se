@@ -25,7 +25,7 @@ public class Se {
     public static final String ENVIRONMENT = "environment";
     private static final Logger logger = LogManager.getLogger(Se.class);
     private Environment environment;
-    private final HyperWebDriver webDriver;
+    private HyperWebDriver webDriver;
 
     private Se(Environment env, HyperWebDriver.DriverTypes webDriverType) throws HyperWebDriverException, EnvironmentException, IOException {
         init(env, webDriverType);

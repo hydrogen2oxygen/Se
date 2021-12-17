@@ -1,8 +1,10 @@
 package net.hydrogen2oxygen.se;
 
+import net.hydrogen2oxygen.se.exceptions.CleanUpException;
 import net.hydrogen2oxygen.se.exceptions.EnvironmentException;
 import net.hydrogen2oxygen.se.exceptions.HyperWebDriverException;
 import net.hydrogen2oxygen.se.exceptions.PreconditionsException;
+import net.hydrogen2oxygen.se.selenium.HyperWebDriver;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,14 +14,14 @@ import java.util.List;
 
 public class Group extends AbstractBaseAutomation {
 
-    private static Logger logger = LogManager.getLogger(Group.class);
-    private String groupName;
-    private List<IAutomation> automationList = new ArrayList<>();
+    private static final Logger logger = LogManager.getLogger(Group.class);
+    private final String groupName;
+    private final List<IAutomation> automationList = new ArrayList<>();
 
     /**
      * Don't use this constructor for parallel automation, only for simple grouping.
-     * @param se
-     * @param groupName
+     * @param se used {@link Se} instance
+     * @param groupName name of thread group
      */
     public Group(Se se, String groupName) {
         this.setSe(se);
@@ -29,11 +31,11 @@ public class Group extends AbstractBaseAutomation {
 
     /**
      * Use this constructor for parallel automation, because it will create a separate instance of selenium webDriver
-     * @param environment
-     * @param groupName
-     * @throws HyperWebDriverException
-     * @throws IOException
-     * @throws EnvironmentException
+     * @param environment use {@link Environment} instance
+     * @param groupName name of thread group
+     * @throws HyperWebDriverException see {@link Se#getInstance(Environment, HyperWebDriver.DriverTypes)}
+     * @throws IOException see {@link Se#getInstance(Environment, HyperWebDriver.DriverTypes)}
+     * @throws EnvironmentException see {@link Se#getInstance(Environment, HyperWebDriver.DriverTypes)}
      */
     public Group(String groupName, Environment environment) throws HyperWebDriverException, IOException, EnvironmentException {
         this.se = Se.getInstance(environment, null);
@@ -45,7 +47,7 @@ public class Group extends AbstractBaseAutomation {
 
     /**
      * The automation added to a group will receive all environments from the group
-     * @param automation
+     * @param automation to run
      */
     public void add(IAutomation automation) {
         automation.setSe(se);
@@ -55,41 +57,41 @@ public class Group extends AbstractBaseAutomation {
     @Override
     public void checkPreconditions() throws PreconditionsException {
 
-        logger.info("Running group automation checking preconditions for " + groupName);
+        logger.info("Running group automation checking preconditions for {}", groupName);
 
         for (IAutomation automation : automationList) {
             try {
                 automation.checkPreconditions();
             } catch (PreconditionsException e) {
-                logger.error("PreconditionsException for automation: " + automation.getClass().getSimpleName(), e);
+                logger.error("PreconditionsException for automation: {}", automation.getClass().getSimpleName(), e);
             } catch (Exception e) {
-                logger.error("Unexpected exception for automation: " + automation.getClass().getSimpleName(), e);
+                logger.error("Unexpected exception for automation: {}", automation.getClass().getSimpleName(), e);
             }
         }
     }
 
     @Override
-    public void run() throws Exception {
+    public void run() {
 
-        logger.info("Running group automation for " + groupName);
+        logger.info("Running group automation for {}", groupName);
 
         for (IAutomation automation : automationList) {
 
-            logger.info("Running automation " + automation.getClass().getSimpleName());
+            logger.info("Running automation {}", automation.getClass().getSimpleName());
 
             try {
                 automation.run();
                 automation.cleanUp();
-            } catch (Exception e) {
+            } catch (CleanUpException e) {
                 logger.error(e);
             }
         }
     }
 
     @Override
-    public void cleanUp() throws Exception {
+    public void cleanUp() throws CleanUpException {
         // finally, a group always close the driver, ALWAYS
-        logger.info("Closing driver for group " + groupName);
+        logger.info("Closing driver for group {}", groupName);
         wd.close();
     }
 
