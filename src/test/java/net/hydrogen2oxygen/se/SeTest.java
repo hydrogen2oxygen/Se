@@ -20,7 +20,8 @@ class SeTest {
 
         try {
             Se se = Se.getInstance();
-            se.setEnvironment("exampleEnvironment.json");
+            se.setEnvironment("/exampleEnvironment.json");
+
             // let's use a snippet
             OpenGithubSearchSelenium openGithubSearchSelenium = new OpenGithubSearchSelenium();
             openGithubSearchSelenium.setSe(se);
