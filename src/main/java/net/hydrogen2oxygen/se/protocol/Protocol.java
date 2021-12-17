@@ -51,7 +51,7 @@ public class Protocol {
 
     /**
      * Use "debug" for every technical protocol. Debug level can be switched off globally.
-     * @param message
+     * @param message to protocol
      */
     public void debug(String message) {
         add(ProtocolType.DEBUG, message);

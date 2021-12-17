@@ -11,16 +11,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
-public class SeTest {
+class SeTest {
 
-    private static Logger logger = LogManager.getLogger(SeTest.class);
+    private static final Logger logger = LogManager.getLogger(SeTest.class);
 
     @Test
-    public void testSingleSnippet() {
+    void testSingleSnippet() {
 
         try {
             Se se = Se.getInstance();
             se.setEnvironment("/exampleEnvironment.json");
+
             // let's use a snippet
             OpenGithubSearchSelenium openGithubSearchSelenium = new OpenGithubSearchSelenium();
             openGithubSearchSelenium.setSe(se);
@@ -35,7 +36,7 @@ public class SeTest {
     }
 
     @Test
-    public void testParallel() throws Exception {
+    void testParallel() throws Exception {
 
         try {
             // load the environment

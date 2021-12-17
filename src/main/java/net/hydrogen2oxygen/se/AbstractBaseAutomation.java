@@ -1,5 +1,6 @@
 package net.hydrogen2oxygen.se;
 
+import net.hydrogen2oxygen.se.exceptions.CleanUpException;
 import net.hydrogen2oxygen.se.exceptions.PreconditionsException;
 import net.hydrogen2oxygen.se.exceptions.SnippetException;
 import net.hydrogen2oxygen.se.protocol.Protocol;
@@ -18,7 +19,7 @@ public abstract class AbstractBaseAutomation implements IAutomation {
 
     public static final String PING_TIMEOUT = "ping.timeout.milliseconds";
     public static final int TIME_OUT = 5000;
-    private static Logger logger = LogManager.getLogger(AbstractBaseAutomation.class);
+    private static final Logger logger = LogManager.getLogger(AbstractBaseAutomation.class);
 
     protected Se se;
     protected HyperWebDriver wd;
@@ -44,9 +45,9 @@ public abstract class AbstractBaseAutomation implements IAutomation {
 
     /**
      * Runs a snippet
-     * @param automation
+     * @param automation snippet to run
      */
-    public void snippet(IAutomation automation) throws Exception {
+    public void snippet(IAutomation automation) {
         if (!Se.isSnippet(automation)) {
             throw new SnippetException("The class " + automation.getClass().getName() + " is not a Snippet! You need to annotate snippets!");
         }
@@ -58,8 +59,8 @@ public abstract class AbstractBaseAutomation implements IAutomation {
     }
 
     /**
-     * Performs a ping to a host
-     * @param host
+     * Performs a ping to host
+     * @param host to ping
      * @return true if success
      */
     public boolean ping(String host) {
@@ -73,7 +74,7 @@ public abstract class AbstractBaseAutomation implements IAutomation {
             protocol.warn("PING - Host " + host + " is unknown!");
             return false;
         } catch (IOException e) {
-            logger.warn("PING - Host " + host + " unreachable, TIMEOUT after " + timeOut + " seconds !");
+            logger.warn("PING - Host {} unreachable, TIMEOUT after {} seconds !", host, timeOut);
             return false;
         }
     }
@@ -94,7 +95,7 @@ public abstract class AbstractBaseAutomation implements IAutomation {
         Integer timeOut = env.getInt(PING_TIMEOUT);
 
         if (timeOut == null) {
-            logger.debug(PING_TIMEOUT + " value not set, using default value of " + TIME_OUT + " milliseconds!");
+            logger.debug(PING_TIMEOUT + " value not set, using default value of {} milliseconds!", TIME_OUT);
             timeOut = TIME_OUT;
         }
 
@@ -107,7 +108,7 @@ public abstract class AbstractBaseAutomation implements IAutomation {
     }
 
     @Override
-    public void cleanUp() throws Exception {
+    public void cleanUp() throws CleanUpException {
 
     }
 
