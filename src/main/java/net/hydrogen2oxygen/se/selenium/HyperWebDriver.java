@@ -1,10 +1,21 @@
 package net.hydrogen2oxygen.se.selenium;
 
-import net.hydrogen2oxygen.se.exceptions.CommandExecutionException;
-import net.hydrogen2oxygen.se.exceptions.HyperWebDriverException;
-import net.hydrogen2oxygen.se.protocol.Protocol;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.time.Duration;
+import java.util.List;
+
 import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.ElementNotInteractableException;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.devtools.v85.io.IO;
@@ -15,12 +26,9 @@ import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.time.Duration;
-import java.util.List;
+import net.hydrogen2oxygen.se.exceptions.CommandExecutionException;
+import net.hydrogen2oxygen.se.exceptions.HyperWebDriverException;
+import net.hydrogen2oxygen.se.protocol.Protocol;
 
 public class HyperWebDriver {
 
@@ -145,6 +153,12 @@ public class HyperWebDriver {
         return this;
     }
 
+    public HyperWebDriver click(By by) {
+    	protocol.debug("Click ID " + by);
+    	driver.findElement(by).click();
+    	return this;
+    }
+
     public HyperWebDriver clickName(String name) {
         protocol.debug("Click NAME " + name);
         driver.findElement(By.name(name)).click();
@@ -184,7 +198,7 @@ public class HyperWebDriver {
 
         return this;
     }
-
+    
     public HyperWebDriver selectOption(String id, String optionText) {
 
         protocol.debug("Select option '" + optionText + "' in ID " + id);
