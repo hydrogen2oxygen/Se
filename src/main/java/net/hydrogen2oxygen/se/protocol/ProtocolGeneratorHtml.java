@@ -8,8 +8,10 @@ import net.hydrogen2oxygen.se.Group;
 import net.hydrogen2oxygen.se.IAutomation;
 import net.hydrogen2oxygen.se.Parallel;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +21,7 @@ public class ProtocolGeneratorHtml {
 
     private static final String BOOTSTRAP_CSS_LINK = "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css";
 
-    private String cssFile = "css/se.css";
+    private String cssFile = "/se.css";
 
     // TODO render errors overview with inner links on top of the page
     // TODO link single automations to the Groups and Groups to the Parallel
@@ -27,10 +29,15 @@ public class ProtocolGeneratorHtml {
     public String generateHtml(IAutomation automation) throws Exception {
 
         Protocol protocol = automation.getProtocol();
-        String css = FileUtils.fileRead(cssFile);
+        String css = IOUtils.resourceToString(cssFile, StandardCharsets.UTF_8);
         List<DomContent> content = new ArrayList<>();
 
         HeadTag head = head(
+                meta().attr("http-equiv","cache-control").attr("content","max-age=0"),
+                meta().attr("http-equiv","cache-control").attr("content","no-cache"),
+                meta().attr("http-equiv","expires").attr("content","0"),
+                meta().attr("http-equiv","expires").attr("content","Tue, 01 Jan 1980 1:00:00 GMT"),
+                meta().attr("http-equiv","pragma").attr("content","no-cache"),
                 title(protocol.getTitle()),
                 link().withRel("stylesheet").withHref(BOOTSTRAP_CSS_LINK),
                 style().withText(css)
@@ -75,7 +82,7 @@ public class ProtocolGeneratorHtml {
         if (!protocolsFolder.exists()) {
             protocolsFolder.mkdirs();
         }
-        FileUtils.fileWrite(protocol.getProtocolsPath() + protocol.getTitle() + ".html", html);
+        FileUtils.writeStringToFile(new File(protocol.getProtocolsPath() + protocol.getTitle() + ".html"), html, StandardCharsets.UTF_8);
 
         return html;
     }
@@ -87,8 +94,9 @@ public class ProtocolGeneratorHtml {
                         tbody(automationList.stream().map(a ->
                                         tr(
                                                 td(a(a.getProtocol().getTitle()).withHref(a.getProtocol().getTitle() + ".html")),
-                                                td("-"))
+                                                td(span(a.getProtocol().getProtocolResult().name()).withClass(a.getProtocol().getProtocolResult().name())))
                                 ).toArray(ContainerTag[]::new)
                         ))).withClasses("table","table-striped")));
+        // TODO as soon as CSS4 will be ready use it!
     }
 }

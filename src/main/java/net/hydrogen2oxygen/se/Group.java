@@ -7,6 +7,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,22 +55,6 @@ public class Group extends AbstractBaseAutomation {
     }
 
     @Override
-    public void checkPreconditions() throws PreconditionsException {
-
-        logger.info("Running group automation checking preconditions for " + groupName);
-
-        for (IAutomation automation : automationList) {
-            try {
-                automation.checkPreconditions();
-            } catch (PreconditionsException e) {
-                logger.error("PreconditionsException for automation: " + automation.getClass().getSimpleName(), e);
-            } catch (Exception e) {
-                logger.error("Unexpected exception for automation: " + automation.getClass().getSimpleName(), e);
-            }
-        }
-    }
-
-    @Override
     public void run() throws Exception {
 
         logger.info("Running group automation for " + groupName);
@@ -78,12 +64,25 @@ public class Group extends AbstractBaseAutomation {
             logger.info("Running automation " + automation.getClass().getSimpleName());
 
             try {
+                automation.checkPreconditions();
                 automation.run();
                 automation.cleanUp();
+            } catch (PreconditionsException e) {
+                logger.error("PreconditionsException for automation: " + automation.getClass().getSimpleName(), e);
+                automation.getProtocol().preconditionFail(getStackTraceAsString(e));
             } catch (Exception e) {
                 logger.error(e);
+                automation.getProtocol().unexpectedTechnicalError(getStackTraceAsString(e));
             }
         }
+    }
+
+    private String getStackTraceAsString(Exception e) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        String sStackTrace = sw.toString();
+        return sStackTrace;
     }
 
     @Override

@@ -1,12 +1,12 @@
 package net.hydrogen2oxygen.se.protocol;
 
 import j2html.tags.DomContent;
-import j2html.tags.specialized.DivTag;
-import j2html.tags.specialized.H1Tag;
-import j2html.tags.specialized.SpanTag;
+import j2html.tags.specialized.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static j2html.TagCreator.*;
 
 /**
  * Every automation generates a protocol
@@ -81,8 +81,8 @@ public class Protocol {
         add(ProtocolType.SCREENSHOT, imageId);
     }
 
-    public void screenshot(String imageId, String description) {
-        add(ProtocolType.SCREENSHOT_WITH_DESCRIPTION, imageId + "|" + description);
+    public void screenshot(String imageId, String title, String description) {
+        add(ProtocolType.SCREENSHOT_WITH_DESCRIPTION, title + "|" + description + "|" + imageId);
     }
 
     public void assertSuccess(String message) {
@@ -124,11 +124,63 @@ public class Protocol {
             switch (this.protocolType) {
                 case DEBUG:
                     return new SpanTag().withClass("debug").withText(data);
+                case PARAGRAPH:
+                    return new PTag().withText(data);
+                case INFO:
+                    return new DivTag().with(span(data).withClasses("badge", "bg-primary"));
+                case WARNING:
+                    return new DivTag().with(span(data).withClasses("badge", "bg-warning", "text-dark"));
+                case ERROR:
+                case PRECONDITION_FAIL:
+                case UNEXPECTED_TECHNICAL_ERROR:
+                    return new DivTag().with(span(data).withClasses("badge", "bg-danger"));
                 case H1:
                     return new H1Tag().withText(data);
+                case H2:
+                    return new H2Tag().withText(data);
+                case H3:
+                    return new H3Tag().withText(data);
+                case H4:
+                    return new H4Tag().withText(data);
+                case SCREENSHOT:
+                    return new PreTag().with(a().with(img().withSrc(data).withHeight("400px")).withHref(data).withTarget(data));
+                case SCREENSHOT_WITH_DESCRIPTION:
+                    return createScreenShotCard(data);
                 default:
                     return new DivTag().withText(protocolType.name() + " - " + data);
             }
+        }
+
+        private DomContent createScreenShotCard(String data) {
+
+            if (data == null) {
+                return new PreTag().withText("no data delivered for screenshot");
+            }
+
+            String title = null;
+            String text = null;
+            String url = data;
+
+            if (data.contains("|")) {
+
+                String parts[] = data.split("\\|");
+
+                if (parts.length == 2) {
+                    title = parts[0];
+                    url = parts[1];
+                } else if (parts.length == 3) {
+                    title = parts[0];
+                    text = parts[1];
+                    url = parts[2];
+                }
+            }
+
+            return new DivTag()
+                    .withClass("card")
+                    .withStyle("width: 18rem")
+                    .with(img().withSrc(url).withClass("card-img-top"),
+                            div(h5(title).withClass("card-title"),
+                                    p(text).withClass("card-text")).withClass("card-body"));
         }
     }
 
